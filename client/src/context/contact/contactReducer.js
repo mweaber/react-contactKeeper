@@ -16,6 +16,47 @@ export default (state, action) => {
         contacts: [...state.contacts, action.payload]
       };
 
+    case UPDATE_CONTACT:
+      return {
+        ...state,
+        contacts: state.contacts.map(contact =>
+          contact.id === action.payload.id ? action.payload : contact
+        )
+      };
+
+    case DELETE_CONTACT:
+      return {
+        ...state,
+        // What this will do is evaluate the statement below and return all contacts that are not the current id from the payload. In our action we sent the id in the payload so we want to filter out that contact so that it will delete.
+        contacts: state.contacts.filter(contact => contact.id != action.payload)
+      };
+    case SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload
+      };
+
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        current: null
+      };
+
+    case FILTER_CONTACTS:
+      return {
+        ...state,
+        filtered: state.contacts.filter(contact => {
+          const regex = new RegExp(`${action.payload}`, 'gi');
+          return contact.name.match(regex) || contact.email.match(regex);
+        })
+      };
+
+    case CLEAR_FILTER:
+      return {
+        ...state,
+        filtered: null
+      };
+
     default:
       return state;
   }
