@@ -5,7 +5,8 @@ import {
   CLEAR_CURRENT,
   UPDATE_CONTACT,
   FILTER_CONTACTS,
-  CLEAR_FILTER
+  CLEAR_FILTER,
+  CONTACT_ERROR
 } from '../types';
 
 export default (state, action) => {
@@ -28,7 +29,7 @@ export default (state, action) => {
       return {
         ...state,
         // What this will do is evaluate the statement below and return all contacts that are not the current id from the payload. In our action we sent the id in the payload so we want to filter out that contact so that it will delete.
-        contacts: state.contacts.filter(contact => contact.id != action.payload)
+        contacts: state.contacts.filter(contact => contact.id !== action.payload)
       };
     case SET_CURRENT:
       return {
@@ -56,6 +57,12 @@ export default (state, action) => {
         ...state,
         filtered: null
       };
+    
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        error: action.payload
+      }
 
     default:
       return state;
